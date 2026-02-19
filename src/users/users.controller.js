@@ -1,12 +1,9 @@
  import { createUser, findUserByEmail, listUsers, getUserById, deleteUser, updateUser, countUser, updateUserPassword, createUsers, excludePassword} from "./users.service.js";
  import { validateUser, validateUpdateUser } from "./users.validation.js";
- 
-
 
  export async function handleCreateUser(req, res) {
     try{
-      
-    req.body.email = req.body.email.trim().toLowerCase();
+        req.body.email = req.body.email.trim().toLowerCase();
 
         //validate user Data
         const result = validateUser(req.body);
@@ -16,13 +13,11 @@
                 errors: result.errors
             });
         }
-        
         //check if user already exists
         const existingUser = await findUserByEmail(req.body.email);
         if (existingUser) {
             return res.status(409).json ({message: 'user already exists'});
         }
-
         // create user 
         const user = await createUser(req.body);
         delete user.password;
@@ -81,7 +76,6 @@
     }
  }
 
- 
  export async function handleUpdateUser(req, res) {
     try {
         //check if user ID EXISTS
@@ -160,9 +154,7 @@ export async function handleUpdatePassword(req, res) {
                 message: 'Password is required'
             });
         }
-        
         await updateUserPassword(id, results.data.password);
-
         return res.status(200).json({ message: 'Password updated' });
     } catch (error) {
         return res.status(500).json({ error: error.message });
@@ -188,7 +180,6 @@ export async function handleSearchUserByEmail(req, res) {
 export async function handleBulkCreateUsers(req, res) {
   try {
     const { users } = req.body;
-
     if (!Array.isArray(users) || users.length === 0) {
       return res.status(400).json({ error: "Provide a non-empty users array" });
     }
